@@ -12,8 +12,19 @@ parser.add_argument(
     help="Ruta del video o URL (RTSP, HTTP...)",
     required=True
 )
+
+args = parser.parse_args()
+
+if args.video == "0":
+    cap = cv2.VideoCapture(0)
+else:
+    cap = cv2.VideoCapture(args.video)
+
+
 coco_model = YOLO('yolo11x.pt')
 license_plate_detector = YOLO('license_plate_detector.pt')
+
+
 reader = easyocr.Reader(['en'], gpu=False)
 csv_filename = 'matriculas.csv'
 #Si el archivo CSV no existe, se crea
@@ -31,7 +42,6 @@ bytetrack_tracker = "bytetrack.yaml"
 
 vehicle_plates = {}
 
-cap = cv2.VideoCapture('./sample4.mp4')
 
 ret,frame= cap.read()
 # Si no se pudo leer el video, se muestra un mensaje de error y se cierra el programa
